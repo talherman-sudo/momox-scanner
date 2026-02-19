@@ -23,4 +23,5 @@ jobs:
       - name: Run the scanner
         env:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
         run: python momox_agent.py
