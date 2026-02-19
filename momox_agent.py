@@ -180,7 +180,7 @@ def get_status_change(isbn: str, currently_available: bool, history: dict) -> st
 # REPORT GENERATOR
 # ──────────────────────────────────────────────
 
-def generate_report(results: list, history: dict) -> tuple:
+ef generate_report(results: list, history: dict) -> tuple:
     """Returns (plain_text_report, html_report)."""
     today = date.today().strftime("%A, %d %B %Y")
     available = [r for r in results if r["available"]]
@@ -199,17 +199,17 @@ def generate_report(results: list, history: dict) -> tuple:
     ]
 
     if available:
-        lines.append("✅ AVAILABLE FOR SALE")
+        lines.append("AVAILABLE FOR SALE")
         lines.append("-" * 30)
         for r in available:
             change = get_status_change(r["isbn"], True, history)
-            price_str = f"€{r['price']}" if r["price"] else "price unknown"
+            price_str = f"EUR {r['price']}" if r["price"] else "price unknown"
             lines.append(f"  {r['isbn']} | {r.get('title','?')} | {price_str} {change}")
-            lines.append(f"  → {r['url']}")
+            lines.append(f"  -> {r['url']}")
         lines.append("")
 
     if not_available:
-        lines.append("❌ NOT AVAILABLE")
+        lines.append("NOT AVAILABLE")
         lines.append("-" * 30)
         for r in not_available:
             change = get_status_change(r["isbn"], False, history)
@@ -218,7 +218,7 @@ def generate_report(results: list, history: dict) -> tuple:
         lines.append("")
 
     if errors:
-        lines.append("⚠️  ERRORS")
+        lines.append("ERRORS")
         lines.append("-" * 30)
         for r in errors:
             lines.append(f"  {r['isbn']} — {r['error']}")
@@ -227,66 +227,70 @@ def generate_report(results: list, history: dict) -> tuple:
     plain_text = "\n".join(lines)
 
     # ── HTML ────────────────────────────────────
-    def row(cells, header=False):
+    def make_row(cells, header=False):
         tag = "th" if header else "td"
         return "<tr>" + "".join(f"<{tag}>{c}</{tag}>" for c in cells) + "</tr>"
 
-    available_rows = "".join(
-        row([
-            r["isbn"],
-            r.get("title") or "?",
-            f"€{r['price']}" if r["price"] else "?",
-            get_status_change(r["isbn"], True, history),
-            f'<a href="{r["url"]}">View</a>' if r.get("url") else "",
-        ])
-        for r in available
+    # Build available table
+    if available:
+        available_rows = ""
+        for r in available:
+            change = get_status_change(r["isbn"], True, history)
+            price = f"EUR {r['price']}" if r["price"] else "?"
+            link = f'<a href="{r["url"]}">View</a>' if r.get("url") else ""
+            available_rows += make_row([r["isbn"], r.get("title") or "?", price, change, link])
+        available_section = (
+            "<table border='1' cellpadding='6' cellspacing='0' style='border-collapse:collapse;width:100%'>"
+            "<thead style='background:#e8f5e9'>" + make_row(["ISBN","Title","Price","Change","Link"], True) + "</thead>"
+            "<tbody>" + available_rows + "</tbody>"
+            "</table>"
+        )
+    else:
+        available_section = "<p>None today.</p>"
+
+    # Build not available table
+    if not_available:
+        na_rows = ""
+        for r in not_available:
+            change = get_status_change(r["isbn"], False, history)
+            na_rows += make_row([r["isbn"], r.get("title") or "?", change])
+        na_section = (
+            "<table border='1' cellpadding='6' cellspacing='0' style='border-collapse:collapse;width:100%'>"
+            "<thead style='background:#fdecea'>" + make_row(["ISBN","Title","Change"], True) + "</thead>"
+            "<tbody>" + na_rows + "</tbody>"
+            "</table>"
+        )
+    else:
+        na_section = "<p>None today.</p>"
+
+    # Build errors table
+    if errors:
+        err_rows = ""
+        for r in errors:
+            err_rows += make_row([r["isbn"], r["error"]])
+        err_section = (
+            "<h3 style='color:orange'>Errors (" + str(len(errors)) + ")</h3>"
+            "<table border='1' cellpadding='6' cellspacing='0' style='border-collapse:collapse;width:100%'>"
+            "<thead style='background:#fff3e0'>" + make_row(["ISBN","Error"], True) + "</thead>"
+            "<tbody>" + err_rows + "</tbody>"
+            "</table>"
+        )
+    else:
+        err_section = ""
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    html = (
+        "<html><body style='font-family:Arial,sans-serif;max-width:700px;margin:auto'>"
+        "<h2 style='color:#333'>Momox ISBN Report</h2>"
+        "<p style='color:#666'>" + today + " &mdash; " + str(len(results)) + " ISBNs scanned</p>"
+        "<h3 style='color:green'>Available (" + str(len(available)) + ")</h3>"
+        + available_section +
+        "<h3 style='color:#c0392b'>Not Available (" + str(len(not_available)) + ")</h3>"
+        + na_section
+        + err_section +
+        "<p style='color:#aaa;font-size:12px;margin-top:30px'>Generated by Momox ISBN Agent &mdash; " + timestamp + "</p>"
+        "</body></html>"
     )
-
-    not_available_rows = "".join(
-        row([
-            r["isbn"],
-            r.get("title") or "?",
-            get_status_change(r["isbn"], False, history),
-        ])
-        for r in not_available
-    )
-
-    error_rows = "".join(
-        row([r["isbn"], r["error"]])
-        for r in errors
-    )
-
-    html = f"""
-    <html><body style="font-family:Arial,sans-serif;max-width:700px;margin:auto">
-    <h2 style="color:#333">📚 Momox ISBN Report</h2>
-    <p style="color:#666">{today} &mdash; {len(results)} ISBNs scanned</p>
-
-    <h3 style="color:green">✅ Available ({len(available)})</h3>
-    {"<p>None today.</p>" if not available else f"""
-    <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%">
-      <thead style="background:#e8f5e9">{row(["ISBN","Title","Price","Change","Link"],True)}</thead>
-      <tbody>{available_rows}</tbody>
-    </table>"""}
-
-    <h3 style="color:#c0392b">❌ Not Available ({len(not_available)})</h3>
-    {"<p>None today.</p>" if not not_available else f"""
-    <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%">
-      <thead style="background:#fdecea">{row(["ISBN","Title","Change"],True)}</thead>
-      <tbody>{not_available_rows}</tbody>
-    </table>"""}
-
-    {"" if not errors else f"""
-    <h3 style="color:orange">Errors ({len(errors)})</h3>
-    <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%">
-      <thead style="background:#fff3e0">{row(["ISBN","Error"],True)}</thead>
-      <tbody>{error_rows}</tbody>
-    </table>"""}
-
-    <p style="color:#aaa;font-size:12px;margin-top:30px">
-      Generated by Momox ISBN Agent &mdash; {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-    </p>
-    </body></html>
-    """
 
     return plain_text, html
 
