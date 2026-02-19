@@ -30,9 +30,9 @@ ISBNS = [
 EMAIL_CONFIG = {
     "smtp_server": "smtp.gmail.com",
     "smtp_port": 465,
-    "from_email": "your.email@gmail.com",
+    "from_email": "talherman@gmail.com",
     "app_password": os.environ.get("EMAIL_PASSWORD", ""),
-    "to_email": "recipient@example.com",
+    "to_email": "talherman@gmail.com",
 }
 
 MOMOX_API_TOKEN = "2231443b8fb511c7b6a0eb25a62577320bac69b6"
