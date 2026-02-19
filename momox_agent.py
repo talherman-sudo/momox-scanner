@@ -65,7 +65,7 @@ def make_scraper_url(target_url):
         "http://api.scraperapi.com"
         "?api_key=" + SCRAPER_API_KEY +
         "&url=" + requests.utils.quote(target_url, safe="") +
-        "&render=false"
+        "&render=true"
     )
 
 
