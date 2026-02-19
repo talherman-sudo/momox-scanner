@@ -475,16 +475,17 @@ def generate_report(results, history):
 # ──────────────────────────────────────────────
 
 def send_email(plain_text, html, config):
+    recipients = [r.strip() for r in config["to_email"].split(",")]
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = "Momox ISBN Weekly Report - " + str(date.today())
+    msg["Subject"] = "Momox ISBN Report - " + str(date.today())
     msg["From"] = config["from_email"]
-    msg["To"] = config["to_email"]
+    msg["To"] = ", ".join(recipients)
     msg.attach(MIMEText(plain_text, "plain"))
     msg.attach(MIMEText(html, "html"))
     with smtplib.SMTP_SSL(config["smtp_server"], config["smtp_port"]) as server:
         server.login(config["from_email"], config["app_password"])
-        server.sendmail(config["from_email"], config["to_email"], msg.as_string())
-    log.info("Report emailed to " + config["to_email"])
+        server.sendmail(config["from_email"], recipients, msg.as_string())
+    log.info("Report emailed to " + str(recipients))
 
 # ──────────────────────────────────────────────
 # MAIN
