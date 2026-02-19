@@ -1,0 +1,26 @@
+name: Daily Momox ISBN Scan
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # runs every day at 7:00 AM UTC (= 8:00 AM Germany)
+  workflow_dispatch:        # this adds a manual "Run now" button
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download your code
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run the scanner
+        env:
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: python momox_agent.py
