@@ -2,7 +2,7 @@ name: Daily Momox ISBN Scan
 
 on:
   schedule:
-    - cron: '0 7 * * *'   # runs every day at 7:00 AM UTC (= 8:00 AM Germany)
+    - cron: '0 7 * * 1'   # runs every day at 7:00 AM UTC (= 8:00 AM Germany)
   workflow_dispatch:        # this adds a manual "Run now" button
 
 jobs:
