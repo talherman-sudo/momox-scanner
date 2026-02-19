@@ -78,7 +78,7 @@ def check_isbn_on_momox(isbn):
 
     try:
         scraper_url = make_scraper_url(target_url)
-        response = requests.get(scraper_url, timeout=30)
+        response = requests.get(scraper_url, timeout=60)
         log.info("ISBN " + isbn + " -> HTTP " + str(response.status_code))
 
         if response.status_code == 200:
