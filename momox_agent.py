@@ -276,7 +276,7 @@ def generate_report(results: list, history: dict) -> tuple:
     </table>"""}
 
     {"" if not errors else f"""
-    <h3 style="color:orange">⚠️ Errors ({len(errors)})</h3>
+    <h3 style="color:orange">Errors ({len(errors)})</h3>
     <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%">
       <thead style="background:#fff3e0">{row(["ISBN","Error"],True)}</thead>
       <tbody>{error_rows}</tbody>
