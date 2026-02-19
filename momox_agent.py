@@ -22,9 +22,16 @@ from email.mime.multipart import MIMEMultipart
 # ──────────────────────────────────────────────
 
 ISBNS = [
-    "9780141036144",
-    "9780062316097",
-    # Add your ISBNs here
+    "9783426282731", # Schreib oder Stirb - Sebastian Fitzek
+    "9783446254411", # Ellbogen - Fatma Aydemir
+    "9783596196944", # Ostfriesenzorn - Klaus-Peter Wolf
+    "9783446260139", # Finsterwald - Christian Tielmann
+    "9783442439157", # Vergessene Welt - Michael Crichton
+    "9783492314541", # Wisting und der Tag der Toten - Jørn Lier Horst
+    "9783462048285", # Ach, diese Lücke, diese entsetzliche Lücke - Joachim Meyerhoff
+    "9783740801366", # Alstersturm - Bodo Manstein
+    "9783426519189", # Der letzte Atemzug - Gabriella Ullberg Westin
+    "9783442035229"  # Das Medaillon - C.C. Bergius
 ]
 
 EMAIL_CONFIG = {
