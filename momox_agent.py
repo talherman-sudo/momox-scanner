@@ -64,7 +64,7 @@ HEADERS = {
 
 
 def check_isbn_on_momox(isbn):
-    url = "https://www.momox.de/api/v2/offer?ean=" + isbn
+    url = "https://www.momox.de/api/v2/products?query=" + isbn + "&limit=1"
     try:
         response = requests.get(url, headers=HEADERS, timeout=10)
         if response.status_code == 200:
