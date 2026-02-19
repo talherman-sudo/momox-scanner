@@ -22,16 +22,34 @@ from email.mime.multipart import MIMEMultipart
 # ──────────────────────────────────────────────
 
 ISBNS = [
-    "9783426282731", # Schreib oder Stirb - Sebastian Fitzek
-    "9783446254411", # Ellbogen - Fatma Aydemir
-    "9783596196944", # Ostfriesenzorn - Klaus-Peter Wolf
-    "9783446260139", # Finsterwald - Christian Tielmann
-    "9783442439157", # Vergessene Welt - Michael Crichton
-    "9783492314541", # Wisting und der Tag der Toten - Jørn Lier Horst
-    "9783462048285", # Ach, diese Lücke, diese entsetzliche Lücke - Joachim Meyerhoff
-    "9783740801366", # Alstersturm - Bodo Manstein
-    "9783426519189", # Der letzte Atemzug - Gabriella Ullberg Westin
-    "9783442035229"  # Das Medaillon - C.C. Bergius
+    "9783437423963",
+    "3194245031",
+    "3437425064",
+    "343742159X",
+    "3437421786",
+    "3540765115",
+    "3938509449",
+    "3540417613",
+    "3437431315",
+    "3929851369",
+    "3527708413",
+    "386026172X",
+    "241491517",
+    "3642123767",
+    "3860261711",
+    "3860261819",
+    "3442314879",
+    "354064394X",
+    "343742534X",
+    "3437413031",
+    "3898839729",
+    "3868920226",
+    "3499623862",
+    "3499249413",
+    "3548363938",
+    "3499626519",
+    "3440108430",
+    "9783868699715"
 ]
 
 EMAIL_CONFIG = {
@@ -44,7 +62,7 @@ EMAIL_CONFIG = {
 
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "")
 DATA_FILE = "isbn_history.json"
-DELAY_BETWEEN_REQUESTS = 4.0
+DELAY_BETWEEN_REQUESTS = 2.0
 
 # ──────────────────────────────────────────────
 # LOGGING
