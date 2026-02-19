@@ -37,7 +37,7 @@ EMAIL_CONFIG = {
     "smtp_server": "smtp.gmail.com",
     "smtp_port": 465,
     "from_email": "your.email@gmail.com",      # ← your Gmail address
-    "app_password": "xxxx xxxx xxxx xxxx",     # ← Gmail App Password (not your main password)
+    "app_password": os.environ.get("EMAIL_PASSWORD", ""),     # ← Gmail App Password (not your main password)
     "to_email": "recipient@example.com",       # ← where to send the report
 }
 
