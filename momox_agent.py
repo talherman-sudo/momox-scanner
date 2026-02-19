@@ -61,7 +61,7 @@ EMAIL_CONFIG = {
     "smtp_port": 465,
     "from_email": "talherman@gmail.com",
     "app_password": os.environ.get("EMAIL_PASSWORD", ""),
-    "to_email": "talherman@gmail.com","nadav.herman.nh@gmail.com"
+    "to_email": "talherman@gmail.com,nadav.herman.nh@gmail.com",
 }
 
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "")
